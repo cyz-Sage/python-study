@@ -36,7 +36,12 @@
 
 ```
 ai-helper/
-├── chat.py            # 主程序：知识库加载、API 调用、对话循环、数据落库
+├── main.py            # 程序入口：对话循环、打印、编排各模块
+├── config.py          # 路径锚定、API Key、模型名、超时等常量的集中管理
+├── llm.py             # 封装大模型 API 调用与异常处理
+├── db.py              # 封装 SQLite 建表与记录写入
+├── prompts.py         # 知识库加载与提示词（messages）构造
+├── requirements.txt   # 依赖清单（requests、python-dotenv）
 ├── notes.txt          # 知识库文件（当前为宠物笔记示例）
 ├── chat_history.db    # SQLite 数据库，首次运行自动创建
 └── README.md
@@ -77,12 +82,12 @@ uv pip install requests python-dotenv
 DEEPSEEK_API_KEY=你的key
 ```
 
-**注意：不要把 Key 写进 `chat.py`，也不要提交 `.env`。** 仓库已用 `.gitignore` 排除 `.env`、`.venv/`、`__pycache__/`、`chat_history.db`。
+**注意：不要把 Key 写进源码，也不要提交 `.env`。** 仓库已用 `.gitignore` 排除 `.env`、`.venv/`、`__pycache__/`、`chat_history.db`。
 
 ### 4. 运行
 
 ```bash
-python ai-helper/chat.py
+python ai-helper/main.py
 ```
 
 启动后会看到：
@@ -175,7 +180,7 @@ recent_history = messages[1:][-MAX_HISTORY:]
 
 ## 后续计划
 
-- [ ] **v2.0** 工程化重构：拆分为 `config.py` / `llm.py` / `db.py` / `main.py`，补充类型注解与 `requirements.txt`
+- [x] **v2.0** 工程化重构：拆分为 `config.py` / `llm.py` / `db.py` / `prompts.py` / `main.py`，补充类型注解与 `requirements.txt`
 - [ ] **v2.1** 实现真正的 RAG：文档切分 → Embedding → 向量数据库（Chroma）检索 → 只注入相关片段
 - [ ] **v2.2** 引入 Function Calling，让模型自主调用工具（查数据库、读文件、检索）
 - [ ] **v2.3** Web 界面（FastAPI 或 Streamlit），支持流式输出
